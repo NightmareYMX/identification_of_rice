@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台登录</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon.ico}"/>
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/static/css/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/static/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/static/js/xadmin.js}"></script>
+    <script type="text/javascript">
+        const url = window.location.protocol + '//' + window.location.host + '/admin_center';
+    </script>
+</head>
+    <body>
+        <!-- 顶部开始 -->
+        <div class="container">
+            <div class="logo"><a href="/index">首页</a></div>
+            <div class="left_open">
+                <i title="展开左侧栏" class="iconfont">&#xe699;</i>
+            </div>
+
+            <ul class="layui-nav right" lay-filter="">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" th:text="${session.sessionadmin.truename}"></a>
+                    <dl class="layui-nav-child">
+                        <!-- 二级菜单 -->
+                        <dd><a onclick="x_admin_show('个人信息',url)">个人信息</a></dd>
+                        <dd><a href="/admin_re_login">切换帐号</a></dd>
+                        <dd><a href="/admin_logout">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <!-- 顶部结束 -->
+        <!-- 中部开始 -->
+        <!-- 左侧菜单开始 -->
+        <div class="left-nav">
+            <div id="side-nav">
+                <ul id="nav">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe6b8;</i>
+                            <cite>用户管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/member-list">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户列表</cite>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/member-add">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户添加</cite>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe705;</i>
+                            <cite>病虫害管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/pest-list">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>病虫害列表</cite>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/pest-add">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>添加病虫害</cite>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe6b2;</i>
+                            <cite>评论管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/comment-list">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>评论列表</cite>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+                <ul class="layui-tab-title">
+                    <li>用户编辑</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="x-body">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">
+                                    <span class="x-red">*</span>用户头像: 
+                                </label>
+                                <div>
+                                    <img id="demo" th:src="${user.userimg}" width="75px"/>
+                                    <span><input
+                                        style="width: 60px;right: 180px;margin-top: 20px; text-indent: 0px;"
+                                        id="upProfile" value="修改头像" class="info_submit"></input>
+                                    </span>
+                                </div>
+                            </div>
+                            <form class="layui-form" th:action="@{/editUser}" method="post">
+                                <input type="hidden" name="_method" value="put">
+                                <input type="hidden" name="userid" th:value="${user.userid}">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span>用户名
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="username" th:value="${user.username}"
+                                            autocomplete="off" class="layui-input">
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">
+                                        <span class="x-red">*</span>将会成为您唯一的登入名
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span>昵称
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="nickname" th:value="${user.nickname}" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="L_pass" class="layui-form-label">
+                                        <span class="x-red">*</span>密码
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="L_pass" name="password" th:value="${user.password}" lay-verify="pass" autocomplete="off" class="layui-input">
+                                    </div>
+                                    <div class="layui-form-mid layui-word-aux">
+                                        6到16个字符
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="phone" class="layui-form-label">
+                                        <span class="x-red">*</span>手机
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="phone" name="phone" th:value="${user.phone}" lay-verify="phone" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label for="L_email" class="layui-form-label">
+                                        <span class="x-red">*</span>邮箱
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="L_email" name="email" th:value="${user.email}" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span>真实姓名
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="truename" th:value="${user.truename}" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span>性别
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="radio" name="sex" value="男" class="layui-input" title="男" th:field="${user.sex}">
+                                        <input type="radio" name="sex" value="女" class="layui-input" title="女" th:field="${user.sex}">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">
+                                        <span class="x-red">*</span>身份证号：
+                                    </label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="idcard" th:value="${user.idcard}" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div style="color: red ;font-size:12px; margin-left: 10px" th:if="${session.memberedit}"><p th:text="${session.memberedit}">错误
+                                    <p></div>
+                                <div class="layui-form-item" style="margin-left: 35px;">
+                                    <button class="layui-btn" lay-filter="add" lay-submit="">
+                                        修改
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-content-bg"></div>
+        <!-- 底部开始 -->
+        <div class="footer">
+            <div class="copyright">Copyright ©2022 identification_of_rice</div>
+        </div>
+        <script>
+            layui.use(['upload', 'layer'], function () {
+                var $ = layui.jquery
+                    , upload = layui.upload
+                    , layer = layui.layer;
+        
+                //常规使用 - 普通图片上传
+                var uploadInst = upload.render({
+                    elem: '#upProfile', 
+                    url: '/upLoadFile/upLoadProfile', 
+                    auto: true,
+                    before: function (obj) {
+                        //预读本地文件示例，不支持ie8
+                        obj.preview(function (index, file, result) {
+                            $('#demo').attr('src', result); //图片链接（base64）
+                        });
+                        layer.msg('上传中', {icon: 16, time: 0});
+                    }, 
+                    done: function (res) {
+                        //如果上传失败
+                        if (res.code != 200) {
+                            layer.msg('上传失败');
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error: function () {
+                        layer.msg(res.msg);
+                    },
+                });
+            });
+        </script>
+    </body>
+</html>
