@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-x: hidden; overflow-y: auto;" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon.ico}"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>用户登录</title>
+    <link rel="stylesheet" th:href="@{/static/lib/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/static/lib/layui/css/login.css}" media="all"/>
+    <style>
+        /* 覆盖原框架样式 */
+        .layui-elem-quote {
+            background-color: inherit !important;
+        }
+
+        .layui-input,
+        .layui-select,
+        .layui-textarea {
+            background-color: inherit;
+            padding-left: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Head -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+
+        <div class="layui-col-sm12 layui-col-md10 zyl_mar_01">
+            <a href="/index"><img th:src="@{/static/images/four.png}" width="270" height="100" class="head-img"></a>
+        </div>
+
+
+    </div>
+</div>
+<!-- Head End -->
+
+<!-- Carousel -->
+<div class="layui-row">
+    <div class="layui-col-sm12 layui-col-md12">
+        <div class="layui-carousel zyl_login_height" id="zyllogin" lay-filter="zyllogin">
+            <div carousel-item="">
+                <div>
+                    <div class="zyl_login_cont"></div>
+                </div>
+                <div>
+                    <img th:src="@{/static/images/carousel/07.jpg}"/>
+                </div>
+                <div>
+                    <img th:src="@{/static/images/carousel/08.jpg}"/>
+                </div>
+                <div>
+                    <img th:src="@{/static/images/carousel/09.jpg}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+
+<!-- Footer -->
+<div class="layui-row">
+    <div class="layui-col-sm12 layui-col-md12 zyl_center zyl_mar_01">
+
+    </div>
+</div>
+<!-- Footer End -->
+
+
+<!-- LoginForm -->
+    <div class="zyl_lofo_main">
+        <fieldset class="layui-elem-field layui-field-title zyl_mar_02">
+            <legend>欢迎登录 - 守稻人</legend>
+        </fieldset>
+        <div class="layui-row layui-col-space15">
+            <form class="layui-form zyl_pad_01" th:action="@{/userLogin}" th:object="${user}" method="post">
+                <div style="color: red ;font-size:12px; margin-left: 10px" th:if="${session.loginIsNull}"><p th:text="${session.loginIsNull}">错误
+                    </p></div>
+                <div class="layui-col-sm12 layui-col-md12" style="margin-top: 10px">
+                    <div class="layui-form-item">
+                        <input type="text" id="user" name="username" lay-verify="required|userName" autocomplete="off"
+                               placeholder="用户名" class="layui-input">
+                        <i class="layui-icon layui-icon-username zyl_lofo_icon"></i>
+                    </div>
+                </div>
+                <div class="layui-col-sm12 layui-col-md12" style="margin-top: 10px">
+                    <div class="layui-form-item">
+                        <input type="password" id="pass" name="password" lay-verify="required|pass" autocomplete="off"
+                               placeholder="密码" class="layui-input">
+                        <i class="layui-icon layui-icon-password zyl_lofo_icon"></i>
+                    </div>
+                </div>
+                <div style="color: red ;font-size:12px" th:if="${session.msglogin}"><p th:text="${session.msglogin}">错误
+                    <p></div>
+                <div class="layui-col-sm12 layui-col-md12" style="margin-top: 10px; margin-left: 10px">
+                    <span> <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="login_btn">立即登录</button></span>
+                </div>
+                <div class="layui-col-sm12 layui-col-md12" style="margin-top: 20px; margin-left: 10px">
+                    <span><a th:href="@{/user_register}" style="color:rgba(255, 0, 0, 0.8);">还没有账户？点击注册！</a></span>
+                    <span><a th:href="@{/admin_login}" style="color:rgb(0,0,0); margin-left: 150px; font-size:12px">管理员登录</a></span>
+                    <p style="margin-top: 20px"><a style="color:rgba(255, 0, 0, 0.5); font-size:12px" th:href="@{/main}">您也可以以游客身份访问</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<!-- LoginForm End -->
+
+<!-- Footer -->
+<div class="layui-row" style="line-height: 80px;">
+    <div class="layui-col-sm12 layui-col-md12 zyl_center zyl_mar_01">
+        ©2022 identification_of_rice
+    </div>
+</div>
+<!-- Footer End -->
+<!-- Jquery Js -->
+<script type="text/javascript" th:src="@{/static/js/jquery.min.js}"></script>
+<!-- Layui Js -->
+<script type="text/javascript" th:src="@{/static/lib/layui/layui.js}"></script>
+<!-- Jqarticle Js -->
+<script type="text/javascript" th:src="@{/static/assembly/jqarticle/jparticle.min.js}"></script>
+<script>
+    layui.use(['carousel', 'form'], function () {
+        var carousel = layui.carousel
+            , form = layui.form;
+
+        //设置轮播主体高度
+        var zyl_login_height = $(window).height() / 1.3;
+        var zyl_car_height = $(".zyl_login_height").css("cssText", "height:" + zyl_login_height + "px!important");
+
+
+        //Login轮播主体
+        carousel.render({
+            elem: '#zyllogin'//指向容器选择器
+            , width: '100%' //设置容器宽度
+            , height: 'zyl_car_height'
+            , arrow: 'always' //始终显示箭头
+            , anim: 'fade' //切换动画方式
+            , autoplay: true //是否自动切换false true
+            , arrow: 'hover' //切换箭头默认显示状态||不显示：none||悬停显示：hover||始终显示：always
+            , indicator: 'none' //指示器位置||外部：outside||内部：inside||不显示：none
+            , interval: '5000' //自动切换时间:单位：ms（毫秒）
+        });
+
+        //粒子线条
+        $(".zyl_login_cont").jParticle({
+            background: "rgba(0,0,0,0)",//背景颜色
+            color: "#fff",//粒子和连线的颜色
+            particlesNumber: 100,//粒子数量
+            //disableLinks:true,//禁止粒子间连线
+            //disableMouse:true,//禁止粒子间连线(鼠标)
+            particle: {
+                minSize: 1,//最小粒子
+                maxSize: 3,//最大粒子
+                speed: 30,//粒子的动画速度
+            }
+        });
+
+    });
+
+</script>
+</body>
+
+</html>

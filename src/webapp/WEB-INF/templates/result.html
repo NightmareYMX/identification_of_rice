@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow-x: hidden; overflow-y: auto;" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon.ico}"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>识别结果</title>
+    <link rel="stylesheet" th:href="@{/static/lib/layui/css/layui.css}" media="all"/>
+    <link rel="stylesheet" th:href="@{/static/lib/layui/css/login.css}" media="all"/>
+    <style>
+        /* 覆盖原框架样式 */
+        .layui-elem-quote {
+            background-color: inherit !important;
+        }
+
+        .layui-input,
+        .layui-select,
+        .layui-textarea {
+
+            padding-left: 30px;
+        }
+
+        .mytopmm {
+            position: absolute;
+            top: 0px;
+            width: 100px;
+
+        }
+
+        .mytitle {
+            position: absolute;
+            height: 60px;
+            line-height: 80px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0 0 0 20px;
+            color: #fff;
+            font-size: 18px;
+            background-repeat: no-repeat;
+            background-size: auto 60px;
+        }
+
+        img {
+            display: inline-block;
+            border: none;
+            height: 100%;
+            width: 100%;
+        }
+
+        .myphoto {
+            position: absolute;
+            right: 125px;
+            width: 24px;
+            height: 24px;
+            margin-top: 7.5px;
+            background: url(/static/images/camera.png) no-repeat;
+            background-size: contain;
+        }
+
+        .graph-header-bottom {
+            height: 140px;
+            background: #009f95;
+            color: #ababab;
+            display: block;
+            position: absolute;
+            width: 100%;
+            top: 15%;
+        }
+
+        .graph-header-bottom .graph-guess .graph-thumb-img {
+            position: absolute;
+            top: 36px;
+            left: 6%;
+            width: 129px;
+            height: 129px;
+
+            background-color: #3a3a3a;
+            background-size: 69px 22px;
+            background-position: 50%;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .graph-header-bottom .graph-guess-cont {
+            position: relative;
+            padding-top: 40px;
+            padding-left: 230px;
+            line-height: 32px;
+            font-size: 15px;
+            z-index: 1;
+        }
+
+        .graph-header-bottom .graph-guess-word {
+            max-width: 340px;
+            height: 32px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .graph-header-bottom .graph-guess-word span {
+            margin-left: 12px;
+        }
+
+        .graph-baike {
+            width: 100%;
+            min-width: 520px;
+            max-width: 880px;
+            margin: 0 auto 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-baike-top {
+            display: block;
+            height: 112px;
+            position: absolute;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .graph-baike-desc {
+            padding-top: 153px;
+            width: 100%;
+            max-height: 132px;
+            line-height: 33px;
+            text-align: left;
+            font-size: 17px;
+            overflow: hidden;
+            color: #737373;
+            word-break: break-all;
+        }
+
+        .graph-baike-img {
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            background-size: cover;
+            position: absolute;
+            left: 0;
+            z-index: 2;
+        }
+
+        .graph-baike-text {
+            font-size: 45px;
+            line-height: 112px;
+            height: 112px;
+            margin-left: 162px;
+            color: #000;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .graph-result-card {
+            position: absolute;
+            left: 20%;
+            top: 40%;
+        }
+
+        .graph-img-opacity1 {
+            width: 100%;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+<div style="display: block">
+    <div class="mytopmm" style="top: 3%;">
+        <a href="/index"> <img th:src="@{/static/images/four.png}" width="270" height="100" class="head-img"> </a>
+    </div>
+    <!-- LoginForm -->
+    <div class="zyl_lofo_main2">
+        <form th:action="@{/pest_result}">
+            <span>
+                <input type="text" name="name" autocomplete="off" placeholder="上传图片或者输入病虫害名" class="layui-input">
+                <span class="myphoto" id="uploadRecognition"></span>
+                <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="formDemo" type="submit" style="float: right">立即搜索</button>
+            </span>
+        </form>
+    </div>
+</div>
+<div class="graph-header-bottom">
+    <div class="graph-container">
+        <div class="graph-guess">
+            <div class="graph-thumb-img"><!---->
+                <span th:style="'background-image: url(/static/images/carousel/02.jpg)'">
+
+                </span>
+                <img th:src="${session.preurl}" class="graph-img-opacity">
+            </div>
+            <div class="graph-guess-cont">
+                <div class="graph-guess-word">
+                    <span style="margin-left: 20px;">图中可能是: </span><span th:text="${session.resultpest.name}"></span>
+                </div>
+                <div class="graph-guess-size">
+                    <!---->  <!----></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="graph-result-card">
+    <div class="graph-baike">
+        <div class="graph-baike-top">
+            <a th:href="@{/pest_find(name=${session.resultpest.name})}" target="_blank">
+                <div class="graph-baike-img">
+                    <!---->
+                    <img class="graph-img-opacity1" th:src="${session.resultpest.infourl}"/>
+                </div>
+                <div class="graph-baike-text" th:text="${session.resultpest.name}">
+                    杨幂
+                </div>
+            </a>
+        </div>
+        <div class="graph-baike-desc">
+            <span th:text="${session.resultpest.content}"></span>
+        </div>
+        <a class="graph-baike-more graph-more-icon" th:href="@{/pest_find(name=${session.resultpest.name})}">
+            <div style="color: red ;font-size:12px;margin-top: 20px;float: right;">查看更多信息</div>
+            <em></em>
+        </a>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/lib/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/static/assembly/jqarticle/jparticle.min.js}"></script>
+<script>
+    layui.use(['upload', 'layer'], function () {
+        var $ = layui.jquery
+            , upload = layui.upload
+            , layer = layui.layer;
+        //常规使用 - 普通图片上传
+        var uploadInst = upload.render({
+            elem: '#uploadRecognition',
+            url: '/upLoadFile/uploadRecognition',
+            auto: true,
+            before: function (obj) {
+                layer.msg('上传中', {icon: 16, time: 0});
+            },
+            done: function (res) {
+                //如果上传失败
+                if (res.code != 200) {
+                    layer.msg('上传失败');
+                } else {
+                    window.location.href = '/pest_result?name=' + res.pestResult;
+                }
+            },
+            error: function () {
+                layer.msg(res.msg);
+            },
+        });
+    });
+</script>
+</body>
+</html>

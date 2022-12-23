@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>后台登录</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/static/images/favicon.ico}"/>
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="stylesheet" th:href="@{/static/css/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/xadmin.css}">
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/static/lib/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/static/js/xadmin.js}"></script>
+    <script>
+        const url = window.location.protocol + '//' + window.location.host + '/admin_center';
+    </script>
+</head>
+    <body>
+        <!-- 顶部开始 -->
+        <div class="container">
+            <div class="logo"><a href="/index">首页</a></div>
+            <div class="left_open">
+                <i title="展开左侧栏" class="iconfont">&#xe699;</i>
+            </div>
+
+            <ul class="layui-nav right" lay-filter="">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" th:text="${session.sessionadmin.truename}"></a>
+                    <dl class="layui-nav-child">
+                        <!-- 二级菜单 -->
+                        <dd><a onclick="x_admin_show('个人信息',url)">个人信息</a></dd>
+                        <dd><a href="/admin_re_login">切换帐号</a></dd>
+                        <dd><a href="/admin_logout">退出</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <!-- 顶部结束 -->
+        <!-- 中部开始 -->
+        <!-- 左侧菜单开始 -->
+        <div class="left-nav">
+            <div id="side-nav">
+                <ul id="nav">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe6b8;</i>
+                            <cite>用户管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/member-list">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户列表</cite>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/member-add">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>用户添加</cite>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe705;</i>
+                            <cite>病虫害管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/pest-list">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>病虫害列表</cite>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/pest-add">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>添加病虫害</cite>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="iconfont">&#xe6b2;</i>
+                            <cite>评论管理</cite>
+                            <i class="iconfont nav_right">&#xe697;</i>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="/comment-list">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>评论列表</cite>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- <div class="x-slide_left"></div> -->
+        <!-- 左侧菜单结束 -->
+        <!-- 右侧主体开始 -->
+        <div class="page-content">
+            <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+                <ul class="layui-tab-title">
+                    <li>用户列表</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="x-body">
+                            <div class="layui-row">
+                                <form class="layui-form layui-col-md12 x-so" th:action="@{/member-search}">
+                                    <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
+                                        class="layui-input">
+                                    <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
+                                            class="layui-icon">&#xe615;</i></button>
+                                </form>
+                            </div>
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>头像</th>
+                                    <th>用户名</th>
+                                    <th>昵称</th>
+                                    <th>密码</th>
+                                    <th>手机</th>
+                                    <th>邮箱</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="user:${userlist}">
+                                <tr>
+                                    <td th:text="${user.userid}">1</td>
+                                    <td><img th:src="${user.userimg}"></td>
+                                    <td th:text="${user.username}">小明</td>
+                                    <td th:text="${user.nickname}">长发哥</td>
+                                    <td th:text="${user.password}">123456</td>
+                                    <td th:text="${user.phone}">13000000000</td>
+                                    <td th:text="${user.email}">admin@mail.com</td>
+                                    <td class="td-manage">
+                                        <a title="编辑" style="margin-right: 10px; margin-left: 15px;" th:href="@{'/toChangeUser/' + ${user.userid}}">
+                                            <i class="layui-icon">&#xe642;</i>
+                                        </a>
+                                        <a title="删除" @onclick="member_del" th:href="@{'/deleteUser/' + ${user.userid}}" style="margin-left: 10px;">
+                                            <i class="layui-icon">&#xe640;</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="page">
+                                <div>
+                                    <a th:href="@{'member-search?start=1'+'&username='+${username}}">[首 页]</a>
+                                    <a class="prev" th:href="@{'member-search?start='+${pre}+'&username='+${username}}">[上一页]</a>
+                                    <a class="next" th:href="@{'member-search?start='+${next}+'&username='+${username}}">[下一页]</a>
+                                    <a th:href="@{'member-search?start='+${last}+'&username='+${username}}">[末 页]</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-content-bg"></div>
+        <form id="delete_form" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+        </form>
+        <script type="text/javascript">
+            function member_del(event) {
+                //通过id获取表单标签
+                var delete_form = document.getElementById("delete_form");
+                //将触发事件的超链接的href属性为表单的action属性赋值
+                delete_form.action = event.target.href;
+                //提交表单
+                delete_form.submit();
+                //阻止超链接的默认跳转行为
+                event.preventDefault();
+            }
+        </script>
+        <div class="footer">
+            <div class="copyright">Copyright ©2022 identification_of_rice</div>
+        </div>
+    </body>
+</html>
