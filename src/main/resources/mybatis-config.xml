@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<settings>
+		<!-- 驼峰 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+
+		<!-- 开启二级缓存 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<setting name="aggressiveLazyLoading" value="false"/>
+
+
+		<!-- 开启日志输出 ：根据 2.7, 2.8 自行选择想要的日志 -->
+		<!--        <setting name="logImpl" value="STDOUT_LOGGING"/>-->  <!-- JUL 输出 -->
+		<!--        <setting name="logImpl" value="LOG4J"/>-->  <!-- log4j 输出 -->
+		<setting name="logImpl" value="SLF4J"/>
+	</settings>
+
+	<typeAliases>
+		<package name="com.school.identification_of_rice.pojo"/>
+	</typeAliases>
+
+	<plugins>
+		<!-- 设置分页插件 -->
+		<plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+	</plugins>
+</configuration>
